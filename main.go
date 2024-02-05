@@ -170,3 +170,12 @@ func main() {
 	}
 
 }
+
+
+
+// .env file is as follows:
+// HOST=localhost
+// PORT=5432
+// USER=htahreem
+// DB_NAME=students
+// PASSWORD=Lighttube32$
