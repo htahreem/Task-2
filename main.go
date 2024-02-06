@@ -26,22 +26,12 @@ func deleteStudent(ctx *gin.Context) {
 		return
 	}
 
-	// _, err = tx.Exec("DELETE FROM students WHERE \"ID\" = $1", ID)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	fmt.Println(err)
-	// 	ctx.AbortWithStatusJSON(400, "Couldn't delete user.")
-	// 	return
-	// }
 	_, err = database.Db.Exec("DELETE FROM students WHERE \"ID\" = $1", ID)
 	if err != nil {
 		fmt.Println(err)
 		ctx.AbortWithStatusJSON(400, "Couldn't delete user.")
 		return
 	}
-
-	// stu := Student{}
-	// fmt.Println(stu, ID, ctx.Params)
 
 	err = tx.Commit()
 	if err != nil {
@@ -86,10 +76,8 @@ func addUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(400, "Bad Input")
 		return
 	}
-	//use Exec whenever we want to insert update or delete
-	//Doing Exec(query) will not use a prepared statement, so lesser TCP calls to the SQL server
 
-	_, err = database.Db.Exec(`INSERT INTO students VALUES (ARRAY[$1], $2, $3, $4, $5)`, stu.Name, stu.RollNo, stu.ContactNo, stu.Email, stu.ID)
+	_, err = database.Db.Exec(`INSERT INTO students VALUES ($1, $2, $3, $4, $5)`, stu.Name, stu.RollNo, stu.ContactNo, stu.Email, stu.ID)
 
 	if err != nil {
 		fmt.Println(err)
@@ -100,11 +88,9 @@ func addUser(ctx *gin.Context) {
 }
 
 func updateUser(ctx *gin.Context) {
-	// fmt.Println(ctx)
-	ID := ctx.Param("ID") // Assuming you want to update a student based on their ID
+	ID := ctx.Param("ID")
 	stu := Student{}
 	data, err := ctx.GetRawData()
-	fmt.Println(string(data))
 	if err != nil {
 		ctx.AbortWithStatusJSON(400, "User data is not defined")
 		return
@@ -115,9 +101,6 @@ func updateUser(ctx *gin.Context) {
 		return
 	}
 
-	// fmt.Println(stu.Name)
-
-	// Use a transaction to ensure atomicity
 	tx, err := database.Db.Begin()
 	if err != nil {
 		ctx.AbortWithStatusJSON(500, "Internal Server Error")
@@ -125,13 +108,12 @@ func updateUser(ctx *gin.Context) {
 	}
 
 	_, err = tx.Exec(`
-        UPDATE students 
-        SET "Name" = ARRAY[$1], 
-            "Roll No" = $2, 
-            "Conatct No." = $3, 
-            "Email" = $4 
+        UPDATE students
+        SET "Name" = $1,
+            "RollNo" = $2,
+            "ContactNo" = $3,
+            "Email" = $4
         WHERE "ID" = $5`,
-		// pq.Array([]string{stu.Name}), stu.RollNo, stu.ContactNo, stu.Email, ID)
 		stu.Name, stu.RollNo, stu.ContactNo, stu.Email, ID)
 
 	if err != nil {
@@ -141,7 +123,6 @@ func updateUser(ctx *gin.Context) {
 		return
 	}
 
-	// Commit the transaction
 	err = tx.Commit()
 	if err != nil {
 		ctx.AbortWithStatusJSON(500, "Internal Server Error")
@@ -164,18 +145,8 @@ func main() {
 	route.PUT("/updateStudent/:ID", updateUser)
 	route.DELETE("/deleteStudent/:ID", deleteStudent)
 
-	err := route.Run(":8080")
+	err := route.Run(":3000")
 	if err != nil {
 		panic(err)
 	}
-
 }
-
-
-
-// .env file is as follows:
-// HOST=localhost
-// PORT=5432
-// USER=htahreem
-// DB_NAME=students
-// PASSWORD=Lighttube32$
