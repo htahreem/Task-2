@@ -17,7 +17,7 @@ type Student struct {
 	ID        string `json:"id"`
 }
 
-func deleteStudent(ctx *gin.Context) {
+func DeleteStudent(ctx *gin.Context) {
 	ID := ctx.Param("ID")
 
 	tx, err := database.Db.Begin()
@@ -42,7 +42,7 @@ func deleteStudent(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, "User is successfully deleted.")
 }
 
-func getAllStudents(ctx *gin.Context) {
+func GetAllStudents(ctx *gin.Context) {
 	rows, err := database.Db.Query("SELECT * FROM students")
 	if err != nil {
 		ctx.AbortWithStatusJSON(500, "Internal Server Error")
@@ -64,7 +64,7 @@ func getAllStudents(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, students)
 }
 
-func addUser(ctx *gin.Context) {
+func AddUser(ctx *gin.Context) {
 	stu := Student{}
 	data, err := ctx.GetRawData()
 	if err != nil {
@@ -87,7 +87,7 @@ func addUser(ctx *gin.Context) {
 	}
 }
 
-func updateUser(ctx *gin.Context) {
+func UpdateUser(ctx *gin.Context) {
 	ID := ctx.Param("ID")
 	stu := Student{}
 	data, err := ctx.GetRawData()
@@ -135,15 +135,20 @@ func updateUser(ctx *gin.Context) {
 func main() {
 	route := gin.Default()
 	database.ConnectDatabase()
-	route.GET("/ping", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	route.GET("/getAllStudents", getAllStudents)
-	route.POST("/addStudent", addUser)
-	route.PUT("/updateStudent/:ID", updateUser)
-	route.DELETE("/deleteStudent/:ID", deleteStudent)
+	// route.GET("/ping", func(context *gin.Context) {
+	// 	context.JSON(http.StatusOK, gin.H{
+	// 		"message": "pong",
+	// 	})
+	// })
+	// route.GET("/getAllStudents", students.GetAllStudents)
+	// route.POST("/addStudent", students.AddUser)
+	// route.PUT("/updateStudent/:ID", students.UpdateUser)
+	// route.DELETE("/deleteStudent/:ID", students.DeleteStudent)
+
+	route.GET("/getAllStudents", GetAllStudents)
+	route.POST("/addStudent", AddUser)
+	route.PUT("/updateStudent/:ID", UpdateUser)
+	route.DELETE("/deleteStudent/:ID", DeleteStudent)
 
 	err := route.Run(":3000")
 	if err != nil {
