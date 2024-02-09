@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	main "example/evenorodd" // Update with your actual package name
-	"example/evenorodd/database"
+	main "task-2" // Update with your actual package name
+	"task-2/database"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
