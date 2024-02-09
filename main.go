@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"example/evenorodd/database"
 	"fmt"
 	"net/http"
+	"task-2/database"
 
 	"github.com/gin-gonic/gin"
 )
@@ -135,15 +135,6 @@ func UpdateUser(ctx *gin.Context) {
 func main() {
 	route := gin.Default()
 	database.ConnectDatabase()
-	// route.GET("/ping", func(context *gin.Context) {
-	// 	context.JSON(http.StatusOK, gin.H{
-	// 		"message": "pong",
-	// 	})
-	// })
-	// route.GET("/getAllStudents", students.GetAllStudents)
-	// route.POST("/addStudent", students.AddUser)
-	// route.PUT("/updateStudent/:ID", students.UpdateUser)
-	// route.DELETE("/deleteStudent/:ID", students.DeleteStudent)
 
 	route.GET("/getAllStudents", GetAllStudents)
 	route.POST("/addStudent", AddUser)
