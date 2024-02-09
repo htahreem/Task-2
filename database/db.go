@@ -20,11 +20,11 @@ func ConnectDatabase() {
 		fmt.Println("Error is occurred  on .env file please check")
 	}
 	//we read our .env file
-	host := os.Getenv("HOST")
-	port, _ := strconv.Atoi(os.Getenv("PORT")) // don't forget to convert int since port is int type.
-	user := os.Getenv("USER")
+	host := os.Getenv("DB_HOST")
+	port, _ := strconv.Atoi(os.Getenv("DB_PORT")) // don't forget to convert int since port is int type.
+	user := os.Getenv("DB_USER")
 	dbname := os.Getenv("DB_NAME")
-	pass := os.Getenv("PASSWORD")
+	pass := os.Getenv("DB_PASSWORD")
 
 	// set up postgres sql to open it.
 	psqlSetup := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
