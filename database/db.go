@@ -19,7 +19,14 @@ func ConnectDatabase() {
 	if err != nil {
 		fmt.Println("Error is occurred  on .env file please check")
 	}
+	
 	//we read our .env file
+	// the env file should have the following layout:
+	// DB_HOST=localhost
+        // DB_PORT=5432
+	// DB_USER=your_username
+	// DB_PASSWORD=your_password
+	// DB_NAME=your_database_name
 	host := os.Getenv("DB_HOST")
 	port, _ := strconv.Atoi(os.Getenv("DB_PORT")) // don't forget to convert int since port is int type.
 	user := os.Getenv("DB_USER")
