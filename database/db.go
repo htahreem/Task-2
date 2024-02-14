@@ -45,3 +45,23 @@ func ConnectDatabase() {
 		fmt.Println("Successfully connected to database!")
 	}
 }
+
+func RunMigration() {
+
+	createTableQuery := `
+		CREATE TABLE IF NOT EXISTS students (
+			name VARCHAR(255),
+			roll_no INTEGER,
+			contact_no INTEGER,
+			email VARCHAR(255),
+			id VARCHAR(255) PRIMARY KEY
+		);
+	`
+
+	_, err := Db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatal("Error creating 'students' table:", err)
+	}
+	fmt.Println("Migration successful!")
+}
+
